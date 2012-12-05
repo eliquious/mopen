@@ -2,7 +2,7 @@ mopen
 =====
 
 This small but powerful Python module allows for the reading of multiple files
-as if they were one. File borders are merged transparently behind the
+as if they were one. File borders are managed transparently behind the
 scenes allowing effortless reads across many files.
 
 Currently, only reads are supported. The files are by default sorted
