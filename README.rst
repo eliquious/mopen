@@ -1,3 +1,4 @@
+
 mopen
 =====
 
@@ -10,14 +11,16 @@ by the stat.ST_INO and stat.ST_SIZE. On Windows, ST_INO is not supported thus
 the files will be sorted by size only.
 
 .. code-block:: python
-    :linenos:
 
     import glob
+    import mopen
     files = glob.glob("./path/to/files/*.txt")
     data = ""
     with mopen(files, "rb") as fh:
         data = fh.read()
 
-.. note:: Performance
+Performance
+-----------
 
-    Reading lines one-by-one is slow. Use readlines(size) whenever possible.
+* Performance overhead of ``mopen`` is very low
+* However, reading lines one-by-one (ie. ``readline()``) is slow. Use ``readlines(size)`` whenever possible.
