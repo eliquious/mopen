@@ -1,0 +1,294 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>mopen.py &mdash; mopen 0.3 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="mopen 0.3 documentation" href="#" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="#">mopen 0.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <span class="target" id="module-mopen"></span><div class="section" id="mopen-py">
+<h1>mopen.py<a class="headerlink" href="#mopen-py" title="Permalink to this headline">¶</a></h1>
+<p>This small but powerful module allows for the reading of multiple files
+as if they were one. File borders are merged transparently behind the
+scenes allowing effortless reads across many files.</p>
+<dl class="class">
+<dt id="mopen.mopen">
+<em class="property">class </em><tt class="descclassname">mopen.</tt><tt class="descname">mopen</tt><big>(</big><em>files</em>, <em>iotype</em>, <em>sort=True</em><big>)</big><a class="headerlink" href="#mopen.mopen" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class imitates the default Python file handle.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>files</strong> &#8211; list of filenames to include</li>
+<li><strong>iotype</strong> (<em>str</em>) &#8211; IO operation</li>
+<li><strong>sort</strong> (<em>bool</em>) &#8211; if True, files are sorted</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Currently, only reads are supported. The files are by default sorted
+by the stat.ST_INO and size. On Windows, ST_INO is not supported thus
+the files will be sorted by size only.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">glob</span> <span class="kn">import</span> <span class="n">glob</span>
+<span class="kn">from</span> <span class="nn">mopen</span> <span class="kn">import</span> <span class="n">mopen</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+
+    <span class="n">files</span> <span class="o">=</span> <span class="n">glob</span><span class="p">(</span><span class="s">&quot;./files/*.txt&quot;</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;concat.txt&quot;</span><span class="p">,</span> <span class="s">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">out</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">mopen</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="s">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">fh</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Performance</p>
+<p class="last">Reading lines one-by-one (ie. <tt class="docutils literal"><span class="pre">readline()</span></tt>) is slow. Use <tt class="docutils literal"><span class="pre">readlines(size)</span></tt> whenever possible.</p>
+</div>
+<dl class="method">
+<dt id="mopen.mopen.available">
+<tt class="descname">available</tt><big>(</big><big>)</big><a class="headerlink" href="#mopen.mopen.available" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">number of bytes remaining</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="mopen.mopen.close">
+<tt class="descname">close</tt><big>(</big><big>)</big><a class="headerlink" href="#mopen.mopen.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Closes the multi-file handle</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mopen.mopen.currentfile">
+<tt class="descname">currentfile</tt><big>(</big><big>)</big><a class="headerlink" href="#mopen.mopen.currentfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the current file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">name of file at the current location</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="mopen.mopen.getfileat">
+<tt class="descname">getfileat</tt><big>(</big><em>pos</em><big>)</big><a class="headerlink" href="#mopen.mopen.getfileat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates which file the given position falls in.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pos</strong> (<em>int</em>) &#8211; byte position</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">(file num, file name)</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">tuple</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="mopen.mopen.read">
+<tt class="descname">read</tt><big>(</big><em>size=None</em><big>)</big><a class="headerlink" href="#mopen.mopen.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads bytes up to the size of bytes given.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>size</strong> (<em>int</em>) &#8211; maximum number of bytes to read</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">string of data read</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="mopen.mopen.readline">
+<tt class="descname">readline</tt><big>(</big><big>)</big><a class="headerlink" href="#mopen.mopen.readline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads a line from the files and advances the file position</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">next line</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="mopen.mopen.readlines">
+<tt class="descname">readlines</tt><big>(</big><em>size=None</em><big>)</big><a class="headerlink" href="#mopen.mopen.readlines" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads lines up to the size of bytes given. Reads are buffered at 32MB.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>size</strong> (<em>int</em>) &#8211; maximum number of bytes to read</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">generator of strings</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">generator</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="mopen.mopen.seek">
+<tt class="descname">seek</tt><big>(</big><em>pos</em><big>)</big><a class="headerlink" href="#mopen.mopen.seek" title="Permalink to this definition">¶</a></dt>
+<dd><p>&#8220;Seeks to a location in the files</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pos</strong> (<em>int</em>) &#8211; byte location in files</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="mopen.mopen.size">
+<tt class="descname">size</tt><big>(</big><big>)</big><a class="headerlink" href="#mopen.mopen.size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Total size of all files included</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">size in bytes</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="mopen.mopen.tell">
+<tt class="descname">tell</tt><big>(</big><big>)</big><a class="headerlink" href="#mopen.mopen.tell" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gives the current position in the files, measured in bytes from the beginning of the files.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">byte location in files</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="#">mopen 0.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, eliquious.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
