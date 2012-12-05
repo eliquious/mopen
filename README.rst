@@ -1,8 +1,7 @@
-
 mopen
 =====
 
-This small but powerful module allows for the reading of multiple files
+This small but powerful Python module allows for the reading of multiple files
 as if they were one. File borders are merged transparently behind the
 scenes allowing effortless reads across many files.
 
