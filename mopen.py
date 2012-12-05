@@ -26,20 +26,23 @@ class mopen(object):
     the files will be sorted by size only.
 
     .. code-block:: python
-        :linenos:
 
-        import glob
-        files = glob.glob("./path/to/files/*.txt")
-        data = ""
-        with mopen(files, "rb") as fh:
-            data = fh.read()
+        from glob import glob
+        from mopen import mopen
+
+        if __name__ == '__main__':
+
+            files = glob("./files/*.txt")
+            with open("concat.txt", "w") as out:
+                with mopen(files, "r") as fh:
+                    out.write(fh.read())
 
     .. note:: Performance
 
-        Reading lines one-by-one is slow. Use readlines(size) whenever possible.
+        Reading lines one-by-one (ie. ``readline()``) is slow. Use ``readlines(size)`` whenever possible.
 
     """
-    def __init__(self, files, iotype="rb", sort=True):
+    def __init__(self, files, iotype, sort=True):
         super(mopen, self).__init__()
         self.type = iotype
         if not "r" in self.type:
